@@ -12,6 +12,7 @@
     --c2:#3E8ED0; --c2s:#E3F0FA;
     --c3:#3FA974; --c3s:#E1F4EA;
     --c4:#A45FBF; --c4s:#F3E8F8;
+    --c5:#E4506B; --c5s:#FCE7EC;
     --ok:#2E9E5B; --oks:#E2F6E9; --no:#E0762F; --nos:#FDEEDF;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
@@ -21,6 +22,16 @@
   .tela{display:none; animation:entrar .35s ease;}
   .tela.ativa{display:block;}
   @keyframes entrar{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:none;}}
+
+  /* ---------- BOTÃO DE SOM ---------- */
+  #btnSom{
+    position:fixed; top:14px; right:14px; z-index:70;
+    width:44px; height:44px; border-radius:50%; border:none; cursor:pointer;
+    background:var(--card); box-shadow:0 4px 14px rgba(43,58,74,.18);
+    display:flex; align-items:center; justify-content:center; transition:transform .15s;
+  }
+  #btnSom:hover{transform:scale(1.08);}
+  #btnSom svg{width:22px; height:22px;}
 
   /* ---------- CABEÇALHO ---------- */
   header{
@@ -34,6 +45,19 @@
     background:rgba(255,255,255,.10); bottom:-50px; left:-30px;}
   header h1{font-family:'Baloo 2',cursive; font-size:clamp(24px,5vw,34px); line-height:1.1;}
   header p{margin-top:6px; font-weight:700; opacity:.95; font-size:14px;}
+
+  /* ---------- ABAS DO MENU ---------- */
+  .abas{display:flex; gap:10px; margin-bottom:18px;}
+  .aba{
+    flex:1; border:3px solid transparent; background:var(--card); border-radius:18px;
+    padding:14px 10px; cursor:pointer; text-align:center;
+    font-family:'Baloo 2',cursive; font-size:17px; color:var(--muted);
+    box-shadow:0 4px 14px rgba(43,58,74,.08); transition:all .18s;
+  }
+  .aba small{display:block; font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; margin-top:2px; color:var(--muted);}
+  .aba:hover{transform:translateY(-2px);}
+  .aba.ativa{border-color:var(--c2); color:var(--c2); background:var(--c2s);}
+  .aba.ativa small{color:var(--c2);}
 
   /* ---------- MENU ---------- */
   .menu-sub{font-family:'Baloo 2',cursive; font-size:19px; margin:2px 0 14px; text-align:center;}
@@ -58,21 +82,11 @@
     margin-top:7px; display:inline-block; font-size:12px; font-weight:800;
     background:#F0F6FB; border-radius:9px; padding:3px 10px; color:var(--c2);
   }
-  .t1:hover{border-color:var(--c1);} .t2:hover{border-color:var(--c2);} .t3:hover{border-color:var(--c3);} .t4:hover{border-color:var(--c4);}
-  .t1 .icone{background:var(--c1s);} .t2 .icone{background:var(--c2s);} .t3 .icone{background:var(--c3s);} .t4 .icone{background:var(--c4s);}
-
-  /* ---------- ABAS DO MENU ---------- */
-  .abas{display:flex; gap:10px; margin-bottom:18px;}
-  .aba{
-    flex:1; border:3px solid transparent; background:var(--card); border-radius:18px;
-    padding:14px 10px; cursor:pointer; text-align:center;
-    font-family:'Baloo 2',cursive; font-size:17px; color:var(--muted);
-    box-shadow:0 4px 14px rgba(43,58,74,.08); transition:all .18s;
-  }
-  .aba small{display:block; font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; margin-top:2px; color:var(--muted);}
-  .aba:hover{transform:translateY(-2px);}
-  .aba.ativa{border-color:var(--c2); color:var(--c2); background:var(--c2s);}
-  .aba.ativa small{color:var(--c2);}
+  .t1:hover{border-color:var(--c1);} .t2:hover{border-color:var(--c2);} .t3:hover{border-color:var(--c3);}
+  .t4:hover{border-color:var(--c4);} .t5:hover{border-color:var(--c5);}
+  .t1 .icone{background:var(--c1s);} .t2 .icone{background:var(--c2s);} .t3 .icone{background:var(--c3s);}
+  .t4 .icone{background:var(--c4s);} .t5 .icone{background:var(--c5s);}
+  .t5{border-style:dashed; border-color:#F3C2CD;}
 
   /* ---------- TELA DE ESTUDO ---------- */
   .resumo{
@@ -99,6 +113,26 @@
   }
   .caixa b{font-family:'Baloo 2',cursive;}
   .acoes-estudo{margin:18px 0 6px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;}
+  .leitura-info{width:100%; text-align:center; font-size:12.5px; font-weight:800; color:var(--muted);}
+
+  /* rapidinhas dentro do resumo */
+  .rapidinha{
+    background:linear-gradient(135deg,#F7FBFF,#EFF6FC); border:2px dashed #B9D4EA;
+    border-radius:16px; padding:13px 15px; margin:14px 0;
+  }
+  .rapidinha .rap-p{font-family:'Baloo 2',cursive; font-size:15px; margin-bottom:9px; color:var(--c2);}
+  .rap-opts{display:flex; gap:8px; flex-wrap:wrap;}
+  .rap-opts button{
+    font-family:'Nunito',sans-serif; font-weight:800; font-size:13.5px; cursor:pointer;
+    border:2px solid #D3E3F0; background:#fff; border-radius:11px; padding:7px 14px;
+    color:var(--ink); transition:all .15s;
+  }
+  .rap-opts button:hover:not(:disabled){border-color:var(--c2); transform:translateY(-2px);}
+  .rap-opts button.certo{border-color:var(--ok); background:var(--oks); color:#1F6B3F;}
+  .rap-opts button.errado{border-color:var(--no); background:var(--nos); color:#9A4E17;}
+  .rap-fb{display:none; margin-top:8px; font-size:13px; font-weight:800;}
+  .rap-fb.ok{display:block; color:#1F6B3F;}
+  .rap-fb.no{display:block; color:#9A4E17;}
 
   /* ---------- QUIZ ---------- */
   .topo-quiz{
@@ -150,11 +184,13 @@
     font-weight:700; font-size:14.5px; line-height:1.45; background:#FBFDFF;
   }
   .opt:hover{border-color:#B9D4EA; transform:translateX(3px);}
+  .opt input{position:absolute; opacity:0; pointer-events:none;}
   .opt .letra{
     font-family:'Baloo 2',cursive; width:26px; height:26px; border-radius:9px; flex-shrink:0;
     background:#E4EDF5; color:var(--muted); display:flex; align-items:center; justify-content:center;
     font-size:14px; transition:all .15s;
   }
+  .opt:focus-within{outline:3px solid #9CC5E6; outline-offset:2px;}
   .opt.sel{border-color:var(--c2); background:var(--c2s);}
   .opt.sel .letra{background:var(--c2); color:#fff;}
   .opt.certa{border-color:var(--ok); background:var(--oks);}
@@ -172,6 +208,7 @@
   .btn:active{transform:translateY(2px); box-shadow:0 2px 0 rgba(62,142,208,.35);}
   .btn:disabled{background:#C4D3E0; box-shadow:none; cursor:default;}
   .btn.verde{background:linear-gradient(135deg,#3FA974,#6FC397); box-shadow:0 4px 0 rgba(63,169,116,.35);}
+  .btn.laranja{background:linear-gradient(135deg,#E0762F,#EE9A5F); box-shadow:0 4px 0 rgba(224,118,47,.35);}
 
   .feedback{
     display:none; margin-top:14px; border-radius:14px; padding:13px 15px;
@@ -181,7 +218,6 @@
   .feedback.no{display:block; background:var(--nos); color:#9A4E17; border:2px solid #F3C7A4;}
   .feedback .tit{font-family:'Baloo 2',cursive; font-size:16px; display:block; margin-bottom:3px;}
 
-  /* selo de acerto que salta na tela */
   .selo{
     position:fixed; left:50%; top:38%; transform:translate(-50%,-50%) scale(0);
     font-family:'Baloo 2',cursive; font-size:clamp(30px,7vw,46px); color:#fff;
@@ -224,6 +260,7 @@
 <body>
 <canvas id="confete"></canvas>
 <div class="selo" id="selo">Acertou!</div>
+<button id="btnSom" title="Ligar ou desligar o som" aria-label="Ligar ou desligar o som"></button>
 
 <div class="wrap">
 
@@ -231,7 +268,7 @@
 <div class="tela ativa" id="telaMenu">
   <header>
     <h1>Quiz de Geografia</h1>
-    <p>3º Ano EFAI &bull; Escolha um conteúdo e teste seus conhecimentos</p>
+    <p>3º Ano EFAI &bull; Escolha um assunto para estudar ou praticar</p>
   </header>
   <div class="abas">
     <button class="aba ativa" id="abaEstudo" onclick="trocarModo('estudo')">Estudo Rápido<small>Resumos para aprender o assunto</small></button>
@@ -246,10 +283,12 @@
   <div class="topo-quiz">
     <button class="btn-voltar" onclick="voltarMenu()">&#8592; Menu</button>
     <div class="tema-nome" id="estudoNome"></div>
+    <div class="barra-prog"><div id="barraLeitura"></div></div>
+    <div class="leitura-info" id="leituraInfo">Leia o resumo até o final para liberar o quiz</div>
   </div>
   <div id="areaResumo"></div>
   <div class="acoes-estudo">
-    <button class="btn verde" id="btnQuizEstudo">Agora, fazer o quiz deste assunto &#8594;</button>
+    <button class="btn verde" id="btnQuizEstudo" disabled>Leia até o final para liberar o quiz</button>
   </div>
 </div>
 
@@ -268,7 +307,7 @@
 <!-- ============ TELA FINAL ============ -->
 <div class="tela" id="telaFinal">
   <header>
-    <h1>Fim do quiz!</h1>
+    <h1 id="finalTitulo">Fim do quiz!</h1>
     <p id="finalTema"></p>
   </header>
   <div class="final-card">
@@ -278,10 +317,7 @@
     <div class="nota" id="notaFinal">0 / 10</div>
     <h2 id="tituloFinal"></h2>
     <p class="msg-final" id="msgFinal"></p>
-    <div class="final-acoes">
-      <button class="btn" onclick="refazer()">Refazer este conteúdo</button>
-      <button class="btn verde" onclick="voltarMenu()">Escolher outro conteúdo</button>
-    </div>
+    <div class="final-acoes" id="finalAcoes"></div>
   </div>
 </div>
 
@@ -289,14 +325,28 @@
 </div>
 
 <script>
-/* ================== DADOS ================== */
+/* ================== ARMAZENAMENTO (com reserva em memória) ================== */
+const store = (()=>{
+  let mem = {}, ok = false;
+  try{ localStorage.setItem('__t','1'); localStorage.removeItem('__t'); ok = true; }catch(e){}
+  return {
+    get(k){ try{ return ok ? localStorage.getItem(k) : (k in mem ? mem[k] : null); }catch(e){ return k in mem ? mem[k] : null; } },
+    set(k,v){ mem[k]=v; try{ if(ok) localStorage.setItem(k,v); }catch(e){} }
+  };
+})();
+
+/* ================== ÍCONES ================== */
 const ICONES = {
   festa:'<svg viewBox="0 0 24 24" fill="none" stroke="#F2A519" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.8"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.2.7a2 2 0 0 0-1.3 2.5l.1.3a2 2 0 0 1-1.3 2.5L16 8.5"/><path d="m11 13 2.2-2.2a2 2 0 0 1 2.8 0l.6.6"/><path d="m2 2 20 20"/></svg>',
   povos:'<svg viewBox="0 0 24 24" fill="none" stroke="#3E8ED0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
   comida:'<svg viewBox="0 0 24 24" fill="none" stroke="#3FA974" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M21.2 8A10 10 0 0 0 14 2.8V8h7.2z"/></svg>',
-  musica:'<svg viewBox="0 0 24 24" fill="none" stroke="#A45FBF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>'
+  musica:'<svg viewBox="0 0 24 24" fill="none" stroke="#A45FBF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',
+  trofeu:'<svg viewBox="0 0 24 24" fill="none" stroke="#E4506B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>',
+  somOn:'<svg viewBox="0 0 24 24" fill="none" stroke="#3E8ED0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>',
+  somOff:'<svg viewBox="0 0 24 24" fill="none" stroke="#6B7A8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>'
 };
 
+/* ================== DADOS ================== */
 const DADOS = [
 {
  titulo:"Manifestações Culturais no Município",
@@ -543,12 +593,27 @@ const RESUMOS = [
   <div class="mini"><b>Amarelinha</b>Vem da Grécia e da Roma antigas.</div>
   <div class="mini"><b>Peteca</b>Foi criada pelos indígenas aqui do Brasil.</div>
 </div>
+<div class="rapidinha" data-c="1">
+  <div class="rap-p">Rapidinha: de onde veio a pipa?</div>
+  <div class="rap-opts"><button>Portugal</button><button>China</button><button>Grécia</button></div>
+  <div class="rap-fb"></div>
+</div>
 <h3>O Carnaval e o entrudo</h3>
 <p>O Carnaval começou com uma brincadeira chamada <b>entrudo</b>, que veio de Portugal. As pessoas jogavam água, farinha e outras coisas umas nas outras! Com o tempo, essa bagunça virou a maior festa do Brasil.</p>
 <h3>Personagens do folclore</h3>
 <p>O folclore brasileiro é cheio de personagens: o <b>Saci</b>, menino de uma perna só que apronta muito; a <b>Iara</b>, a sereia dos rios; o <b>Boto</b>, que vira um rapaz nas festas; e a <b>Cuca</b>, a bruxa que assusta as crianças que não querem dormir.</p>
+<div class="rapidinha" data-c="2">
+  <div class="rap-p">Rapidinha: quem criou a peteca?</div>
+  <div class="rap-opts"><button>Os portugueses</button><button>Os chineses</button><button>Os indígenas</button></div>
+  <div class="rap-fb"></div>
+</div>
 <h3>O futebol</h3>
 <p>O futebol, a maior paixão do Brasil, nasceu na <b>Inglaterra</b>. E sabia que, no começo, só os <b>homens</b> podiam jogar? Ainda bem que isso mudou!</p>
+<div class="rapidinha" data-c="0">
+  <div class="rap-p">Rapidinha: o futebol nasceu em qual país?</div>
+  <div class="rap-opts"><button>Inglaterra</button><button>Brasil</button><button>Itália</button></div>
+  <div class="rap-fb"></div>
+</div>
 <div class="caixa"><b>Para lembrar:</b> multiculturalidade é quando várias culturas diferentes vivem juntas no mesmo lugar. O Brasil é assim: um pedacinho de cada povo!</div>`,
 
 `<h3>O que é etnia?</h3>
@@ -557,12 +622,27 @@ const RESUMOS = [
 <p>São povos que vivem de um jeito mais ligado à <b>natureza</b>, com costumes muito antigos. Infelizmente, eles enfrentam ameaças, como o desmatamento e a perda de suas terras.</p>
 <h3>Os seringueiros</h3>
 <p>Vivem na <b>Floresta Amazônica</b> e tiram o <b>látex</b> da seringueira, uma árvore. Do látex se faz a borracha, que vira pneus, luvas, balões e brinquedos!</p>
+<div class="rapidinha" data-c="1">
+  <div class="rap-p">Rapidinha: onde vivem as seringueiras?</div>
+  <div class="rap-opts"><button>Na Mata Atlântica</button><button>Na Floresta Amazônica</button><button>Na Caatinga</button></div>
+  <div class="rap-fb"></div>
+</div>
 <h3>Os africanos e os quilombos</h3>
 <p>Os africanos foram trazidos à força para o Brasil, <b>escravizados</b>, em navios lotados e em condições horríveis. Muitos conseguiam fugir e formavam os <b>quilombos</b>, lugares escondidos onde viviam em liberdade. O mais famoso foi o <b>Quilombo dos Palmares</b>, que teve como grande líder o <b>Zumbi</b>.</p>
+<div class="rapidinha" data-c="0">
+  <div class="rap-p">Rapidinha: qual foi o quilombo mais famoso?</div>
+  <div class="rap-opts"><button>Palmares</button><button>Ouro Preto</button><button>Rio Vermelho</button></div>
+  <div class="rap-fb"></div>
+</div>
 <h3>Ribeirinhos e caiçaras</h3>
 <div class="mini-grid">
   <div class="mini"><b>Ribeirinhos</b>Vivem na beira dos <b>rios</b>, em casas de palafita, e pescam para viver.</div>
   <div class="mini"><b>Caiçaras</b>Vivem na beira do <b>mar</b>, no litoral, e também vivem da pesca.</div>
+</div>
+<div class="rapidinha" data-c="2">
+  <div class="rap-p">Rapidinha: quem vive na beira dos rios?</div>
+  <div class="rap-opts"><button>Os caiçaras</button><button>Os sertanejos</button><button>Os ribeirinhos</button></div>
+  <div class="rap-fb"></div>
 </div>
 <div class="caixa"><b>Truque para não confundir:</b> RIbeirinho tem RIo escondido no nome! Se tem RIo, é RIbeirinho. Se é mar e praia, é caiçara.</div>`,
 
@@ -577,6 +657,11 @@ const RESUMOS = [
 </div>
 <h3>Heranças dos indígenas</h3>
 <p>Dos indígenas aprendemos a dormir de <b>rede</b>, a tomar <b>banho todo dia</b> e a fazer <b>mutirão</b> (quando todo mundo se junta para ajudar em um trabalho). Eles também nos deram alimentos como o <b>guaraná</b>, a <b>batata-doce</b> e o <b>palmito</b>, e palavras como <b>samambaia</b>, <b>Curitiba</b> e <b>siri</b>.</p>
+<div class="rapidinha" data-c="1">
+  <div class="rap-p">Rapidinha: o mutirão é herança de qual povo?</div>
+  <div class="rap-opts"><button>Dos italianos</button><button>Dos indígenas</button><button>Dos alemães</button></div>
+  <div class="rap-fb"></div>
+</div>
 <h3>Sabores que contam histórias</h3>
 <p>Cada povo que veio para o Brasil trouxe comidas deliciosas:</p>
 <div class="mini-grid">
@@ -586,12 +671,27 @@ const RESUMOS = [
   <div class="mini"><b>Japoneses</b>Sushi e sashimi.</div>
   <div class="mini"><b>Alemães</b>Frios (presunto, salame) e cerveja.</div>
 </div>
+<div class="rapidinha" data-c="0">
+  <div class="rap-p">Rapidinha: quem trouxe o quibe e a esfiha?</div>
+  <div class="rap-opts"><button>Os árabes</button><button>Os japoneses</button><button>Os italianos</button></div>
+  <div class="rap-fb"></div>
+</div>
+<div class="rapidinha" data-c="2">
+  <div class="rap-p">Rapidinha: a pizza veio com qual povo?</div>
+  <div class="rap-opts"><button>Os portugueses</button><button>Os alemães</button><button>Os italianos</button></div>
+  <div class="rap-fb"></div>
+</div>
 <div class="caixa"><b>Para lembrar:</b> quando você come pizza no jantar, está provando um pedacinho da Itália. Quando toma guaraná, um pedacinho da cultura indígena!</div>`,
 
 `<h3>Heranças dos africanos</h3>
 <p>Os africanos deixaram heranças gigantes na nossa cultura. As mais famosas são a <b>capoeira</b>, o <b>samba</b> e a <b>feijoada</b>.</p>
 <h3>O que é a capoeira?</h3>
 <p>É uma mistura de <b>luta, dança e música</b>. Foi criada pelos africanos escravizados como forma de resistência e hoje é praticada no mundo inteiro!</p>
+<div class="rapidinha" data-c="1">
+  <div class="rap-p">Rapidinha: a capoeira mistura o quê?</div>
+  <div class="rap-opts"><button>Corrida e natação</button><button>Luta, dança e música</button><button>Teatro e pintura</button></div>
+  <div class="rap-fb"></div>
+</div>
 <h3>Instrumentos musicais</h3>
 <div class="mini-grid">
   <div class="mini"><b>Berimbau</b>Usado na roda de capoeira.</div>
@@ -600,17 +700,61 @@ const RESUMOS = [
 </div>
 <h3>Comidas de origem africana</h3>
 <p>O <b>acarajé</b>, o <b>vatapá</b> e o <b>azeite de dendê</b> são heranças africanas. Essas delícias são muito famosas na <b>Bahia</b>, o estado onde a influência africana é mais forte.</p>
+<div class="rapidinha" data-c="0">
+  <div class="rap-p">Rapidinha: em qual estado a influência africana é mais forte?</div>
+  <div class="rap-opts"><button>Bahia</button><button>Paraná</button><button>Santa Catarina</button></div>
+  <div class="rap-fb"></div>
+</div>
 <h3>Palavras que vieram da África</h3>
 <p>Você usa palavras africanas todos os dias e nem sabia: <b>caçula</b> (o filho mais novo), <b>cafuné</b> (carinho na cabeça), <b>moleque</b>, <b>quitanda</b> e <b>dendê</b>.</p>
 <h3>Por que o Brasil é multicultural?</h3>
 <p>Porque a nossa cultura foi formada pela <b>mistura de vários povos</b>: indígenas, africanos, europeus e imigrantes de muitos países. As culturas não ficaram separadas, elas se misturaram!</p>
+<div class="rapidinha" data-c="2">
+  <div class="rap-p">Rapidinha: cafuné é palavra de qual origem?</div>
+  <div class="rap-opts"><button>Indígena</button><button>Italiana</button><button>Africana</button></div>
+  <div class="rap-fb"></div>
+</div>
 <div class="caixa"><b>Exemplo do dia a dia:</b> uma família que almoça feijoada, janta pizza, dorme de rede e faz cafuné está vivendo a multiculturalidade sem perceber!</div>`
 ];
 
 /* ================== ESTADO ================== */
 let modo = 'estudo';
-let temaAtual = 0, idxQ = 0, acertos = 0, streak = 0;
-const melhores = [null, null, null, null]; // melhor nota da sessão
+let somAtivo = store.get('geoquiz_som') !== '0';
+let sessao = null; // {nome, cor, tipo:'tema'|'simulado'|'erros', temaIdx, qs, erradas:[]}
+let idxQ = 0, acertos = 0, streak = 0;
+
+let melhores = [null,null,null,null,null]; // 4 temas + simulado
+try{
+  const salvo = JSON.parse(store.get('geoquiz_melhores') || 'null');
+  if(Array.isArray(salvo) && salvo.length===5) melhores = salvo;
+}catch(e){}
+function salvarMelhores(){ store.set('geoquiz_melhores', JSON.stringify(melhores)); }
+
+/* ================== UTILIDADES ================== */
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+// cria uma instância da questão com alternativas embaralhadas
+function instanciar(q){
+  const ordem = shuffle([...q.o.keys()]);
+  return { ref:q, p:q.p, o:ordem.map(i=>q.o[i]), c:ordem.indexOf(q.c), e:q.e };
+}
+
+/* ================== BOTÃO DE SOM ================== */
+const btnSom = document.getElementById('btnSom');
+function renderSom(){ btnSom.innerHTML = somAtivo ? ICONES.somOn : ICONES.somOff; }
+btnSom.onclick = ()=>{
+  somAtivo = !somAtivo;
+  store.set('geoquiz_som', somAtivo ? '1' : '0');
+  renderSom();
+  if(somAtivo) tocarSom(true, 660);
+};
+renderSom();
 
 /* ================== MENU ================== */
 const menuEl = document.getElementById('menuCards');
@@ -634,23 +778,26 @@ function montarMenu(){
         <div class="desc">${info}</div>
         ${modo==='quiz' && melhores[i]!==null ? `<span class="melhor">Melhor resultado: ${melhores[i]} / ${t.questoes.length}</span>` : ''}
       </div>`;
-    b.onclick = ()=> modo==='estudo' ? abrirEstudo(i) : iniciarQuiz(i);
+    b.onclick = ()=> modo==='estudo' ? abrirEstudo(i) : iniciarTema(i);
     menuEl.appendChild(b);
   });
-}
 
+  // cartão do simulado geral (apenas no modo quiz)
+  if(modo==='quiz'){
+    const b = document.createElement('button');
+    b.className = 'card-tema t5';
+    b.innerHTML = `
+      <div class="icone">${ICONES.trofeu}</div>
+      <div>
+        <h3>Simulado Geral</h3>
+        <div class="desc">12 questões sorteadas de todos os assuntos, como na prova de verdade</div>
+        ${melhores[4]!==null ? `<span class="melhor" style="color:var(--c5)">Melhor resultado: ${melhores[4]} / 12</span>` : ''}
+      </div>`;
+    b.onclick = iniciarSimulado;
+    menuEl.appendChild(b);
+  }
+}
 function trocarModo(m){ modo = m; montarMenu(); }
-
-/* ================== ESTUDO RÁPIDO ================== */
-function abrirEstudo(i){
-  temaAtual = i;
-  const tema = DADOS[i];
-  document.getElementById('estudoNome').textContent = tema.titulo;
-  document.getElementById('areaResumo').innerHTML =
-    `<div class="resumo" style="border-top-color:${tema.cor}; --dot:${tema.cor}">${RESUMOS[i]}</div>`;
-  document.getElementById('btnQuizEstudo').onclick = ()=>iniciarQuiz(i);
-  mostrarTela('telaEstudo');
-}
 
 /* ================== NAVEGAÇÃO ================== */
 function mostrarTela(id){
@@ -659,21 +806,106 @@ function mostrarTela(id){
   window.scrollTo({top:0});
 }
 function voltarMenu(){ montarMenu(); mostrarTela('telaMenu'); }
-function refazer(){ iniciarQuiz(temaAtual); }
 
-/* ================== QUIZ ================== */
-function iniciarQuiz(i){
-  temaAtual = i; idxQ = 0; acertos = 0; streak = 0;
-  document.getElementById('temaNome').textContent = DADOS[i].titulo;
+/* ================== ESTUDO RÁPIDO ================== */
+let leituraLiberada = false;
+function abrirEstudo(i){
+  const tema = DADOS[i];
+  leituraLiberada = false;
+  document.getElementById('estudoNome').textContent = tema.titulo;
+  document.getElementById('areaResumo').innerHTML =
+    `<div class="resumo" style="border-top-color:${tema.cor}; --dot:${tema.cor}">${RESUMOS[i]}</div>`;
+
+  const btn = document.getElementById('btnQuizEstudo');
+  btn.disabled = true;
+  btn.textContent = 'Leia até o final para liberar o quiz';
+  btn.onclick = ()=>iniciarTema(i);
+  document.getElementById('barraLeitura').style.width = '0%';
+  document.getElementById('leituraInfo').textContent = 'Leia o resumo até o final para liberar o quiz';
+
+  // liga as rapidinhas
+  document.querySelectorAll('#areaResumo .rapidinha').forEach(r=>{
+    const c = parseInt(r.dataset.c);
+    const btns = [...r.querySelectorAll('.rap-opts button')];
+    const fb = r.querySelector('.rap-fb');
+    btns.forEach((b,bi)=>{
+      b.onclick = ()=>{
+        if(r.classList.contains('feita')) return;
+        r.classList.add('feita');
+        btns.forEach((bb,bj)=>{
+          bb.disabled = true;
+          if(bj===c) bb.classList.add('certo');
+          if(bj===bi && bi!==c) bb.classList.add('errado');
+        });
+        if(bi===c){
+          fb.textContent = 'Isso mesmo!'; fb.className = 'rap-fb ok';
+          tocarSom(true, 740);
+          const rc = btns[c].getBoundingClientRect();
+          celebrar(30, rc.left+rc.width/2, rc.top+rc.height/2, false);
+        } else {
+          fb.textContent = 'Quase! A certa está em verde.'; fb.className = 'rap-fb no';
+          tocarSom(false);
+        }
+      };
+    });
+  });
+
+  mostrarTela('telaEstudo');
+  setTimeout(atualizarLeitura, 80);
+}
+
+function atualizarLeitura(){
+  if(!document.getElementById('telaEstudo').classList.contains('ativa')) return;
+  const resumo = document.querySelector('#areaResumo .resumo');
+  if(!resumo) return;
+  const r = resumo.getBoundingClientRect();
+  let pct;
+  if(r.height <= innerHeight - 80) pct = 100;
+  else pct = Math.max(0, Math.min(100, (innerHeight - r.top) / r.height * 100));
+  document.getElementById('barraLeitura').style.width = pct + '%';
+  if(pct >= 97 && !leituraLiberada){
+    leituraLiberada = true;
+    const btn = document.getElementById('btnQuizEstudo');
+    btn.disabled = false;
+    btn.textContent = 'Agora, fazer o quiz deste assunto \u2192';
+    document.getElementById('leituraInfo').textContent = 'Leitura completa! O quiz está liberado.';
+    tocarSom(true, 880);
+  }
+}
+addEventListener('scroll', atualizarLeitura, {passive:true});
+addEventListener('resize', atualizarLeitura);
+
+/* ================== INÍCIO DE SESSÕES DE QUIZ ================== */
+function iniciarTema(i){
+  const t = DADOS[i];
+  sessao = { nome:t.titulo, cor:t.cor, tipo:'tema', temaIdx:i,
+             qs: shuffle(t.questoes).map(instanciar), erradas:[] };
+  comecarSessao();
+}
+function iniciarSimulado(){
+  let escolhidas = [];
+  DADOS.forEach(t=>{ escolhidas = escolhidas.concat(shuffle(t.questoes).slice(0,3)); });
+  sessao = { nome:'Simulado Geral', cor:'#E4506B', tipo:'simulado', temaIdx:4,
+             qs: shuffle(escolhidas).map(instanciar), erradas:[] };
+  comecarSessao();
+}
+function iniciarErros(refs){
+  sessao = { nome:`${sessao.nome} — Revisão dos erros`, cor:sessao.cor, tipo:'erros', temaIdx:null,
+             qs: shuffle(refs).map(instanciar), erradas:[] };
+  comecarSessao();
+}
+function comecarSessao(){
+  idxQ = 0; acertos = 0; streak = 0;
+  document.getElementById('temaNome').textContent = sessao.nome;
   atualizarStreak();
   mostrarTela('telaQuiz');
   renderQuestao();
 }
 
+/* ================== QUIZ ================== */
 function renderQuestao(){
-  const tema = DADOS[temaAtual];
-  const q = tema.questoes[idxQ];
-  const total = tema.questoes.length;
+  const q = sessao.qs[idxQ];
+  const total = sessao.qs.length;
 
   document.getElementById('barra').style.width = (idxQ/total*100) + '%';
   document.getElementById('contagem').textContent = `Questão ${idxQ+1} de ${total} • Acertos: ${acertos}`;
@@ -682,19 +914,21 @@ function renderQuestao(){
   area.innerHTML = '';
   const qDiv = document.createElement('div');
   qDiv.className = 'q';
-  qDiv.style.borderTopColor = tema.cor;
+  qDiv.style.borderTopColor = sessao.cor;
 
+  const nomeGrupo = 'q_' + idxQ + '_' + Date.now();
   let optsHtml = '';
   q.o.forEach((op, oi)=>{
     optsHtml += `
-      <div class="opt" data-oi="${oi}" role="button" tabindex="0">
+      <label class="opt" data-oi="${oi}">
+        <input type="radio" name="${nomeGrupo}" value="${oi}">
         <span class="letra">${String.fromCharCode(65+oi)}</span>
         <span>${op}</span>
-      </div>`;
+      </label>`;
   });
 
   qDiv.innerHTML = `
-    <div class="enun"><span class="qn" style="background:${tema.cor}">${String(idxQ+1).padStart(2,'0')}</span>${q.p}</div>
+    <div class="enun"><span class="qn" style="background:${sessao.cor}">${String(idxQ+1).padStart(2,'0')}</span>${q.p}</div>
     <div class="opts">${optsHtml}</div>
     <div class="acao">
       <button class="btn" id="btnVerificar" disabled>Verificar</button>
@@ -704,27 +938,29 @@ function renderQuestao(){
   area.appendChild(qDiv);
 
   const opts = [...qDiv.querySelectorAll('.opt')];
+  const radios = [...qDiv.querySelectorAll('input[type=radio]')];
   const btnV = qDiv.querySelector('#btnVerificar');
   const btnP = qDiv.querySelector('#btnProxima');
   const fb = qDiv.querySelector('#fb');
-  let escolha = null, travado = false;
+  let travado = false;
 
-  function selecionar(opt){
-    if(travado) return;
-    opts.forEach(o=>o.classList.remove('sel'));
-    opt.classList.add('sel');
-    escolha = parseInt(opt.dataset.oi);
-    btnV.disabled = false;
-  }
-  opts.forEach(opt=>{
-    opt.addEventListener('click', ()=>selecionar(opt));
-    opt.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault(); selecionar(opt);} });
+  radios.forEach((rd, oi)=>{
+    rd.addEventListener('change', ()=>{
+      if(travado) return;
+      opts.forEach(o=>o.classList.remove('sel'));
+      opts[oi].classList.add('sel');
+      btnV.disabled = false;
+    });
   });
 
   btnV.addEventListener('click', ()=>{
-    if(escolha===null || travado) return;
+    const marcado = radios.find(r=>r.checked);
+    if(!marcado || travado) return;
     travado = true;
+    const escolha = parseInt(marcado.value);
     const correta = q.c;
+    radios.forEach(r=>r.disabled = true);
+
     opts.forEach((o,oi)=>{
       o.classList.add('travada'); o.classList.remove('sel');
       if(oi===correta) o.classList.add('certa');
@@ -737,26 +973,31 @@ function renderQuestao(){
       qDiv.classList.add('saltar');
       fb.className = 'feedback ok';
       fb.innerHTML = `<span class="tit">${fraseAcerto()}</span>${q.e}`;
-      celebrar();
+      const rc = opts[correta].getBoundingClientRect();
+      celebrar(80, rc.left + rc.width/2, rc.top + rc.height/2, true);
       tocarSom(true);
     } else {
       streak = 0;
+      sessao.erradas.push(q.ref);
       qDiv.classList.add('tremer');
       fb.className = 'feedback no';
       fb.innerHTML = `<span class="tit">Não foi dessa vez. A correta é a letra ${String.fromCharCode(65+correta)}.</span>${q.e}`;
       tocarSom(false);
     }
     atualizarStreak();
-    document.getElementById('contagem').textContent = `Questão ${idxQ+1} de ${total} • Acertos: ${acertos}`;
+    document.getElementById('contagem').textContent = `Questão ${idxQ+1} de ${sessao.qs.length} • Acertos: ${acertos}`;
 
-    btnP.style.display = 'inline-block';
-    btnP.textContent = (idxQ+1 < total) ? 'Próxima \u2192' : 'Ver resultado \u2192';
-    btnP.focus();
+    // pequeno atraso para garantir a leitura do feedback
+    setTimeout(()=>{
+      btnP.style.display = 'inline-block';
+      btnP.textContent = (idxQ+1 < sessao.qs.length) ? 'Próxima \u2192' : 'Ver resultado \u2192';
+      btnP.focus();
+    }, 650);
   });
 
   btnP.addEventListener('click', ()=>{
     idxQ++;
-    if(idxQ < total) renderQuestao();
+    if(idxQ < sessao.qs.length) renderQuestao();
     else mostrarFinal();
   });
 }
@@ -767,7 +1008,6 @@ function fraseAcerto(){
   if(streak>=3) return `Que sequência! ${streak} acertos seguidos!`;
   return base[Math.floor(Math.random()*base.length)];
 }
-
 function atualizarStreak(){
   const el = document.getElementById('streak');
   document.getElementById('streakN').textContent = streak;
@@ -776,11 +1016,20 @@ function atualizarStreak(){
 
 /* ================== FINAL ================== */
 function mostrarFinal(){
-  const tema = DADOS[temaAtual];
-  const total = tema.questoes.length;
-  if(melhores[temaAtual]===null || acertos>melhores[temaAtual]) melhores[temaAtual] = acertos;
+  const total = sessao.qs.length;
+  const errosRefs = sessao.erradas.slice();
 
-  document.getElementById('finalTema').textContent = tema.titulo;
+  // salva melhor resultado apenas em rodadas completas de tema ou simulado
+  if(sessao.tipo!=='erros' && sessao.temaIdx!==null){
+    if(melhores[sessao.temaIdx]===null || acertos>melhores[sessao.temaIdx]){
+      melhores[sessao.temaIdx] = acertos;
+      salvarMelhores();
+    }
+  }
+
+  document.getElementById('finalTitulo').textContent =
+    sessao.tipo==='erros' ? 'Fim da revisão!' : 'Fim do quiz!';
+  document.getElementById('finalTema').textContent = sessao.nome;
   document.getElementById('notaFinal').textContent = `${acertos} / ${total}`;
 
   const pct = acertos/total;
@@ -788,11 +1037,42 @@ function mostrarFinal(){
   if(pct===1){ titulo='Nota máxima!'; msg='Você acertou todas as questões. Domínio completo do conteúdo!'; nEstrelas=3; }
   else if(pct>=0.8){ titulo='Excelente!'; msg='Ótimo resultado! Revise apenas as questões que errou.'; nEstrelas=3; }
   else if(pct>=0.6){ titulo='Bom trabalho!'; msg='Você está no caminho certo. Releia as explicações e tente de novo.'; nEstrelas=2; }
-  else if(pct>=0.4){ titulo='Quase lá!'; msg='Revise o conteúdo do capítulo e refaça o quiz para melhorar sua nota.'; nEstrelas=1; }
-  else { titulo='Vamos revisar?'; msg='Estude o capítulo com calma e volte para tentar de novo. Você consegue!'; nEstrelas=0; }
+  else if(pct>=0.4){ titulo='Quase lá!'; msg='Revise o conteúdo e refaça o quiz para melhorar sua nota.'; nEstrelas=1; }
+  else { titulo='Vamos revisar?'; msg='Estude o resumo com calma e volte para tentar de novo. Você consegue!'; nEstrelas=0; }
 
   document.getElementById('tituloFinal').textContent = titulo;
   document.getElementById('msgFinal').textContent = msg;
+
+  // botões de ação do final
+  const acoes = document.getElementById('finalAcoes');
+  acoes.innerHTML = '';
+  if(errosRefs.length > 0){
+    const b = document.createElement('button');
+    b.className = 'btn laranja';
+    b.textContent = `Refazer só as que errei (${errosRefs.length})`;
+    b.onclick = ()=>iniciarErros(errosRefs);
+    acoes.appendChild(b);
+  }
+  const bRef = document.createElement('button');
+  bRef.className = 'btn';
+  if(sessao.tipo==='simulado'){
+    bRef.textContent = 'Novo simulado';
+    bRef.onclick = iniciarSimulado;
+  } else if(sessao.tipo==='erros'){
+    bRef.textContent = 'Refazer a revisão';
+    const refs = sessao.qs.map(q=>q.ref);
+    bRef.onclick = ()=>iniciarErros(refs);
+  } else {
+    bRef.textContent = 'Refazer este conteúdo';
+    const ti = sessao.temaIdx;
+    bRef.onclick = ()=>iniciarTema(ti);
+  }
+  acoes.appendChild(bRef);
+  const bMenu = document.createElement('button');
+  bMenu.className = 'btn verde';
+  bMenu.textContent = 'Escolher outro conteúdo';
+  bMenu.onclick = voltarMenu;
+  acoes.appendChild(bMenu);
 
   const estrelas = [...document.querySelectorAll('#estrelas .e')];
   estrelas.forEach(e=>{ e.classList.remove('ganha','anim'); e.style.transform='scale(0)'; });
@@ -806,7 +1086,7 @@ function mostrarFinal(){
       if(i<nEstrelas) tocarSom(true, 660 + i*160);
     }, 350 + i*350);
   });
-  if(pct>=0.8) setTimeout(()=>celebrar(140), 500);
+  if(pct>=0.8) setTimeout(()=>celebrar(140, innerWidth/2, innerHeight*0.35, false), 500);
 }
 
 /* ================== EFEITOS: CONFETE ================== */
@@ -817,18 +1097,20 @@ function ajustarCanvas(){ cv.width = innerWidth; cv.height = innerHeight; }
 addEventListener('resize', ajustarCanvas); ajustarCanvas();
 
 const CORES = ['#F2A519','#3E8ED0','#3FA974','#E0762F','#A45FBF','#E4506B'];
-function celebrar(n=80){
+function celebrar(n, x, y, comSelo){
   if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const selo = document.getElementById('selo');
-  if(n<100){ // selo só nos acertos de questão
+  x = (typeof x==='number') ? x : innerWidth/2;
+  y = (typeof y==='number') ? y : innerHeight*0.35;
+  if(comSelo){
+    const selo = document.getElementById('selo');
     selo.classList.remove('mostrar'); void selo.offsetWidth;
     selo.textContent = streak>=3 ? `${streak} seguidas!` : 'Acertou!';
     selo.classList.add('mostrar');
   }
   for(let i=0;i<n;i++){
     parts.push({
-      x: innerWidth/2 + (Math.random()-.5)*160,
-      y: innerHeight*0.35,
+      x: x + (Math.random()-.5)*120,
+      y: y,
       vx:(Math.random()-.5)*11,
       vy:-(Math.random()*9+5),
       g:.28+Math.random()*.12,
@@ -858,6 +1140,7 @@ function loopConfete(){
 /* ================== EFEITOS: SOM ================== */
 let audioCtx = null;
 function tocarSom(acertou, freqBase){
+  if(!somAtivo) return;
   try{
     if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
     const t = audioCtx.currentTime;
