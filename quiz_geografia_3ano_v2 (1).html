@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz de Geografia — 3º Ano</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EEF6FC; --card:#FFFFFF; --ink:#2B3A4A; --muted:#6B7A8C;
+    --c1:#F2A519; --c1s:#FDF2D8;
+    --c2:#3E8ED0; --c2s:#E3F0FA;
+    --c3:#3FA974; --c3s:#E1F4EA;
+    --c4:#A45FBF; --c4s:#F3E8F8;
+    --ok:#2E9E5B; --oks:#E2F6E9; --no:#E0762F; --nos:#FDEEDF;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{font-family:'Nunito',sans-serif; background:var(--bg); color:var(--ink); padding:16px; overflow-x:hidden;}
+  .wrap{max-width:760px; margin:0 auto;}
+  .tela{display:none; animation:entrar .35s ease;}
+  .tela.ativa{display:block;}
+  @keyframes entrar{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:none;}}
+
+  /* ---------- CABEÇALHO ---------- */
+  header{
+    background:linear-gradient(135deg,#3E8ED0,#6BB1E3);
+    border-radius:22px; padding:26px 22px; color:#fff; text-align:center;
+    box-shadow:0 8px 0 rgba(62,142,208,.25); margin-bottom:20px; position:relative; overflow:hidden;
+  }
+  header::before{content:""; position:absolute; width:170px; height:170px; border-radius:50%;
+    background:rgba(255,255,255,.12); top:-70px; right:-50px;}
+  header::after{content:""; position:absolute; width:110px; height:110px; border-radius:50%;
+    background:rgba(255,255,255,.10); bottom:-50px; left:-30px;}
+  header h1{font-family:'Baloo 2',cursive; font-size:clamp(24px,5vw,34px); line-height:1.1;}
+  header p{margin-top:6px; font-weight:700; opacity:.95; font-size:14px;}
+
+  /* ---------- MENU ---------- */
+  .menu-sub{font-family:'Baloo 2',cursive; font-size:19px; margin:2px 0 14px; text-align:center;}
+  .cards{display:grid; gap:14px;}
+  .card-tema{
+    background:var(--card); border-radius:20px; padding:20px; cursor:pointer;
+    display:flex; align-items:center; gap:16px;
+    box-shadow:0 4px 14px rgba(43,58,74,.08);
+    border:3px solid transparent; transition:transform .18s, border-color .18s, box-shadow .18s;
+    text-align:left; width:100%; font-family:inherit; color:inherit;
+  }
+  .card-tema:hover{transform:translateY(-4px) scale(1.01); box-shadow:0 10px 22px rgba(43,58,74,.14);}
+  .card-tema:active{transform:scale(.98);}
+  .card-tema .icone{
+    width:64px; height:64px; border-radius:18px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .card-tema .icone svg{width:36px; height:36px;}
+  .card-tema h3{font-family:'Baloo 2',cursive; font-size:18px; line-height:1.2;}
+  .card-tema .desc{font-size:13px; color:var(--muted); font-weight:700; margin-top:3px;}
+  .card-tema .melhor{
+    margin-top:7px; display:inline-block; font-size:12px; font-weight:800;
+    background:#F0F6FB; border-radius:9px; padding:3px 10px; color:var(--c2);
+  }
+  .t1:hover{border-color:var(--c1);} .t2:hover{border-color:var(--c2);} .t3:hover{border-color:var(--c3);} .t4:hover{border-color:var(--c4);}
+  .t1 .icone{background:var(--c1s);} .t2 .icone{background:var(--c2s);} .t3 .icone{background:var(--c3s);} .t4 .icone{background:var(--c4s);}
+
+  /* ---------- ABAS DO MENU ---------- */
+  .abas{display:flex; gap:10px; margin-bottom:18px;}
+  .aba{
+    flex:1; border:3px solid transparent; background:var(--card); border-radius:18px;
+    padding:14px 10px; cursor:pointer; text-align:center;
+    font-family:'Baloo 2',cursive; font-size:17px; color:var(--muted);
+    box-shadow:0 4px 14px rgba(43,58,74,.08); transition:all .18s;
+  }
+  .aba small{display:block; font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; margin-top:2px; color:var(--muted);}
+  .aba:hover{transform:translateY(-2px);}
+  .aba.ativa{border-color:var(--c2); color:var(--c2); background:var(--c2s);}
+  .aba.ativa small{color:var(--c2);}
+
+  /* ---------- TELA DE ESTUDO ---------- */
+  .resumo{
+    background:var(--card); border-radius:20px; padding:22px 20px;
+    box-shadow:0 4px 14px rgba(43,58,74,.08); border-top:6px solid var(--c2);
+    font-size:15px; line-height:1.7; animation:entrar .3s ease;
+  }
+  .resumo p{font-weight:700; margin-bottom:12px; color:#3A4A5C;}
+  .resumo h3{
+    font-family:'Baloo 2',cursive; font-size:19px; margin:20px 0 8px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .resumo h3:first-child{margin-top:0;}
+  .resumo h3::before{content:""; width:10px; height:10px; border-radius:50%; background:var(--dot,var(--c2)); flex-shrink:0;}
+  .mini-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin:12px 0 16px;}
+  .mini{
+    background:#FBFDFF; border:2px solid #E4EDF5; border-radius:14px;
+    padding:10px 13px; font-size:13.5px; font-weight:700; line-height:1.45;
+  }
+  .mini b{font-family:'Baloo 2',cursive; display:block; font-size:15px; margin-bottom:2px;}
+  .caixa{
+    border-radius:14px; padding:13px 15px; margin:14px 0; font-weight:700;
+    border:2px solid #F6C15C; background:var(--c1s); font-size:14px; line-height:1.6;
+  }
+  .caixa b{font-family:'Baloo 2',cursive;}
+  .acoes-estudo{margin:18px 0 6px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;}
+
+  /* ---------- QUIZ ---------- */
+  .topo-quiz{
+    background:var(--card); border-radius:16px; padding:12px 16px; margin-bottom:16px;
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+    box-shadow:0 4px 14px rgba(43,58,74,.08);
+  }
+  .btn-voltar{
+    border:none; background:#F0F6FB; color:var(--c2); font-family:'Baloo 2',cursive;
+    font-size:14px; border-radius:11px; padding:7px 13px; cursor:pointer;
+  }
+  .btn-voltar:hover{background:#E3F0FA;}
+  .tema-nome{font-family:'Baloo 2',cursive; font-size:15px; flex:1; min-width:120px; line-height:1.15;}
+  .streak{
+    font-family:'Baloo 2',cursive; font-size:15px; color:#E0762F;
+    background:var(--nos); border-radius:11px; padding:5px 12px;
+    display:none; align-items:center; gap:5px;
+  }
+  .streak.on{display:flex; animation:pulsar .5s ease;}
+  @keyframes pulsar{0%{transform:scale(.6);} 60%{transform:scale(1.2);} 100%{transform:scale(1);}}
+  .barra-prog{height:12px; background:#E4EDF5; border-radius:8px; overflow:hidden; width:100%;}
+  .barra-prog > div{height:100%; width:0%; border-radius:8px; transition:width .4s;
+    background:linear-gradient(90deg,#3FA974,#7BC89B);}
+  .contagem{font-size:12.5px; font-weight:800; color:var(--muted); width:100%; text-align:right; margin-top:5px;}
+
+  .q{
+    background:var(--card); border-radius:20px; padding:22px 20px;
+    box-shadow:0 4px 14px rgba(43,58,74,.08); border-top:6px solid var(--c2);
+    animation:entrar .3s ease;
+  }
+  .q.tremer{animation:tremer .45s ease;}
+  @keyframes tremer{
+    0%,100%{transform:translateX(0);} 20%{transform:translateX(-9px);}
+    40%{transform:translateX(9px);} 60%{transform:translateX(-6px);} 80%{transform:translateX(6px);}
+  }
+  .q.saltar{animation:saltar .55s ease;}
+  @keyframes saltar{
+    0%{transform:scale(1);} 35%{transform:scale(1.035);} 60%{transform:scale(.99);} 100%{transform:scale(1);}
+  }
+  .q .enun{font-weight:800; font-size:16.5px; line-height:1.5; margin-bottom:16px;}
+  .q .enun .qn{
+    display:inline-block; border-radius:10px; padding:1px 10px; margin-right:7px;
+    font-family:'Baloo 2',cursive; font-size:14px; color:#fff; background:var(--c2);
+  }
+  .opts{display:grid; gap:9px;}
+  .opt{
+    display:flex; align-items:flex-start; gap:10px; padding:12px 14px;
+    border:2px solid #E4EDF5; border-radius:14px; cursor:pointer; transition:all .15s;
+    font-weight:700; font-size:14.5px; line-height:1.45; background:#FBFDFF;
+  }
+  .opt:hover{border-color:#B9D4EA; transform:translateX(3px);}
+  .opt .letra{
+    font-family:'Baloo 2',cursive; width:26px; height:26px; border-radius:9px; flex-shrink:0;
+    background:#E4EDF5; color:var(--muted); display:flex; align-items:center; justify-content:center;
+    font-size:14px; transition:all .15s;
+  }
+  .opt.sel{border-color:var(--c2); background:var(--c2s);}
+  .opt.sel .letra{background:var(--c2); color:#fff;}
+  .opt.certa{border-color:var(--ok); background:var(--oks);}
+  .opt.certa .letra{background:var(--ok); color:#fff;}
+  .opt.errada{border-color:var(--no); background:var(--nos);}
+  .opt.errada .letra{background:var(--no); color:#fff;}
+  .opt.travada{cursor:default;} .opt.travada:hover{transform:none;}
+
+  .acao{margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;}
+  .btn{
+    font-family:'Baloo 2',cursive; font-size:16px; color:#fff; border:none; cursor:pointer;
+    padding:10px 26px; border-radius:14px; background:linear-gradient(135deg,#3E8ED0,#5CA4DE);
+    box-shadow:0 4px 0 rgba(62,142,208,.35); transition:transform .1s;
+  }
+  .btn:active{transform:translateY(2px); box-shadow:0 2px 0 rgba(62,142,208,.35);}
+  .btn:disabled{background:#C4D3E0; box-shadow:none; cursor:default;}
+  .btn.verde{background:linear-gradient(135deg,#3FA974,#6FC397); box-shadow:0 4px 0 rgba(63,169,116,.35);}
+
+  .feedback{
+    display:none; margin-top:14px; border-radius:14px; padding:13px 15px;
+    font-size:14px; font-weight:700; line-height:1.55;
+  }
+  .feedback.ok{display:block; background:var(--oks); color:#1F6B3F; border:2px solid #A9DEBE;}
+  .feedback.no{display:block; background:var(--nos); color:#9A4E17; border:2px solid #F3C7A4;}
+  .feedback .tit{font-family:'Baloo 2',cursive; font-size:16px; display:block; margin-bottom:3px;}
+
+  /* selo de acerto que salta na tela */
+  .selo{
+    position:fixed; left:50%; top:38%; transform:translate(-50%,-50%) scale(0);
+    font-family:'Baloo 2',cursive; font-size:clamp(30px,7vw,46px); color:#fff;
+    background:linear-gradient(135deg,#3FA974,#6FC397);
+    padding:14px 34px; border-radius:22px; z-index:60; pointer-events:none;
+    box-shadow:0 10px 30px rgba(63,169,116,.45); opacity:0;
+  }
+  .selo.mostrar{animation:selo .9s ease forwards;}
+  @keyframes selo{
+    0%{opacity:0; transform:translate(-50%,-50%) scale(.2) rotate(-8deg);}
+    35%{opacity:1; transform:translate(-50%,-50%) scale(1.12) rotate(2deg);}
+    55%{transform:translate(-50%,-50%) scale(1) rotate(0);}
+    80%{opacity:1;}
+    100%{opacity:0; transform:translate(-50%,-62%) scale(.95);}
+  }
+
+  /* ---------- RESULTADO ---------- */
+  .final-card{
+    background:var(--card); border-radius:22px; padding:30px 22px; text-align:center;
+    box-shadow:0 4px 14px rgba(43,58,74,.09);
+  }
+  .final-card h2{font-family:'Baloo 2',cursive; font-size:26px;}
+  .estrelas{font-size:44px; letter-spacing:6px; margin:12px 0 4px;}
+  .estrelas .e{display:inline-block; color:#D8E2EC; transform:scale(0);}
+  .estrelas .e.ganha{color:#F2A519; text-shadow:0 3px 0 rgba(242,165,25,.25);}
+  .estrelas .e.anim{animation:estrela .5s ease forwards;}
+  @keyframes estrela{0%{transform:scale(0) rotate(-30deg);} 60%{transform:scale(1.35) rotate(8deg);} 100%{transform:scale(1) rotate(0);}}
+  .nota{font-family:'Baloo 2',cursive; font-size:46px; color:var(--c2); margin:6px 0;}
+  .msg-final{font-weight:700; color:var(--muted); max-width:420px; margin:0 auto 6px;}
+  .final-acoes{margin-top:18px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;}
+
+  canvas#confete{position:fixed; inset:0; pointer-events:none; z-index:50;}
+  footer{text-align:center; font-size:12px; color:var(--muted); font-weight:700; padding:20px 0 10px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<canvas id="confete"></canvas>
+<div class="selo" id="selo">Acertou!</div>
+
+<div class="wrap">
+
+<!-- ============ TELA MENU ============ -->
+<div class="tela ativa" id="telaMenu">
+  <header>
+    <h1>Quiz de Geografia</h1>
+    <p>3º Ano EFAI &bull; Escolha um conteúdo e teste seus conhecimentos</p>
+  </header>
+  <div class="abas">
+    <button class="aba ativa" id="abaEstudo" onclick="trocarModo('estudo')">Estudo Rápido<small>Resumos para aprender o assunto</small></button>
+    <button class="aba" id="abaQuiz" onclick="trocarModo('quiz')">Quiz<small>Questões para praticar</small></button>
+  </div>
+  <div class="menu-sub" id="menuSub">Qual assunto você quer estudar hoje?</div>
+  <div class="cards" id="menuCards"></div>
+</div>
+
+<!-- ============ TELA ESTUDO ============ -->
+<div class="tela" id="telaEstudo">
+  <div class="topo-quiz">
+    <button class="btn-voltar" onclick="voltarMenu()">&#8592; Menu</button>
+    <div class="tema-nome" id="estudoNome"></div>
+  </div>
+  <div id="areaResumo"></div>
+  <div class="acoes-estudo">
+    <button class="btn verde" id="btnQuizEstudo">Agora, fazer o quiz deste assunto &#8594;</button>
+  </div>
+</div>
+
+<!-- ============ TELA QUIZ ============ -->
+<div class="tela" id="telaQuiz">
+  <div class="topo-quiz">
+    <button class="btn-voltar" onclick="voltarMenu()">&#8592; Menu</button>
+    <div class="tema-nome" id="temaNome"></div>
+    <div class="streak" id="streak">&#128293; <span id="streakN">0</span> seguidas</div>
+    <div class="barra-prog"><div id="barra"></div></div>
+    <div class="contagem" id="contagem"></div>
+  </div>
+  <div id="areaQuestao"></div>
+</div>
+
+<!-- ============ TELA FINAL ============ -->
+<div class="tela" id="telaFinal">
+  <header>
+    <h1>Fim do quiz!</h1>
+    <p id="finalTema"></p>
+  </header>
+  <div class="final-card">
+    <div class="estrelas" id="estrelas">
+      <span class="e">&#9733;</span><span class="e">&#9733;</span><span class="e">&#9733;</span>
+    </div>
+    <div class="nota" id="notaFinal">0 / 10</div>
+    <h2 id="tituloFinal"></h2>
+    <p class="msg-final" id="msgFinal"></p>
+    <div class="final-acoes">
+      <button class="btn" onclick="refazer()">Refazer este conteúdo</button>
+      <button class="btn verde" onclick="voltarMenu()">Escolher outro conteúdo</button>
+    </div>
+  </div>
+</div>
+
+<footer>Geografia &bull; 3º Ano EFAI &bull; Revisão completa: capítulos 4, 5 e 6</footer>
+</div>
+
+<script>
+/* ================== DADOS ================== */
+const ICONES = {
+  festa:'<svg viewBox="0 0 24 24" fill="none" stroke="#F2A519" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.8"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.2.7a2 2 0 0 0-1.3 2.5l.1.3a2 2 0 0 1-1.3 2.5L16 8.5"/><path d="m11 13 2.2-2.2a2 2 0 0 1 2.8 0l.6.6"/><path d="m2 2 20 20"/></svg>',
+  povos:'<svg viewBox="0 0 24 24" fill="none" stroke="#3E8ED0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  comida:'<svg viewBox="0 0 24 24" fill="none" stroke="#3FA974" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M21.2 8A10 10 0 0 0 14 2.8V8h7.2z"/></svg>',
+  musica:'<svg viewBox="0 0 24 24" fill="none" stroke="#A45FBF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>'
+};
+
+const DADOS = [
+{
+ titulo:"Manifestações Culturais no Município",
+ desc:"Brincadeiras, Carnaval, folclore e futebol", icone:ICONES.festa, classe:"t1", cor:"#F2A519",
+ questoes:[
+ {p:"O que melhor define uma manifestação cultural?",
+  o:["Uma atividade praticada somente por artistas profissionais em teatros",
+     "Uma forma de expressar os costumes, as tradições e a identidade de um povo",
+     "Um evento organizado apenas pelo governo para atrair turistas",
+     "Uma festa realizada uma única vez, sem ligação com a história do lugar"],
+  c:1, e:"Manifestações culturais são as formas de um povo expressar sua cultura: festas, danças, músicas, brincadeiras e costumes passados de geração em geração."},
+ {p:"A brincadeira da amarelinha chegou ao Brasil por influência de qual povo?",
+  o:["Dos povos indígenas que já viviam aqui",
+     "Dos chineses, junto com a pipa",
+     "Dos portugueses, que a conheceram na Grécia e na Roma antigas",
+     "Dos africanos trazidos durante o período colonial"],
+  c:2, e:"A amarelinha tem origem muito antiga, na Grécia e na Roma antigas, e chegou ao Brasil trazida pelos portugueses."},
+ {p:"A pipa é uma brincadeira muito popular no Brasil. Qual é a sua origem?",
+  o:["Foi criada na China há milhares de anos",
+     "Foi inventada pelos povos indígenas brasileiros",
+     "Surgiu em Portugal durante as grandes navegações",
+     "Foi trazida pelos imigrantes italianos no século XIX"],
+  c:0, e:"A pipa surgiu na China, onde era usada há milhares de anos, e se espalhou pelo mundo até chegar ao Brasil."},
+ {p:"Qual brincadeira tem origem nos povos indígenas do Brasil?",
+  o:["A ciranda","A amarelinha","A pipa","A peteca"],
+  c:3, e:"A peteca é uma criação dos povos indígenas brasileiros. A ciranda veio de Portugal, a pipa da China e a amarelinha da Grécia e Roma antigas."},
+ {p:"A ciranda, brincadeira de roda muito conhecida, tem origem em qual país?",
+  o:["Espanha","Portugal","França","Itália"],
+  c:1, e:"A ciranda é uma brincadeira de roda de origem portuguesa, que se tornou muito popular no Brasil, principalmente em Pernambuco."},
+ {p:"O Carnaval tem origem em uma antiga brincadeira chamada entrudo. O que era o entrudo?",
+  o:["Um desfile organizado pelas primeiras escolas de samba do Rio de Janeiro",
+     "Uma brincadeira trazida de Portugal em que as pessoas jogavam água, farinha e outros itens umas nas outras",
+     "Uma dança típica apresentada nas festas juninas do interior do país",
+     "Uma celebração religiosa em homenagem aos santos padroeiros das cidades"],
+  c:1, e:"O entrudo veio de Portugal e era uma brincadeira de rua em que as pessoas se molhavam e jogavam farinha umas nas outras. Com o tempo, deu origem ao Carnaval."},
+ {p:"Qual alternativa apresenta apenas personagens do folclore brasileiro?",
+  o:["Saci, Iara, Boto e Cuca",
+     "Saci, Iara, Hércules e Cuca",
+     "Boto, Iara, Netuno e Curupira",
+     "Cuca, Saci, Zeus e Boto"],
+  c:0, e:"Saci, Iara, Boto e Cuca são personagens do nosso folclore. Hércules, Zeus e Netuno pertencem à mitologia grega e romana, não ao folclore brasileiro."},
+ {p:"Sobre a origem do futebol, paixão nacional dos brasileiros, é correto afirmar que:",
+  o:["Surgiu no Brasil, praticado pelos trabalhadores das primeiras fábricas",
+     "Surgiu na Itália, praticado por estudantes das universidades",
+     "Surgiu na Inglaterra e, no início, era praticado apenas por homens",
+     "Surgiu na França, praticado por soldados durante os treinamentos"],
+  c:2, e:"Acredita-se que o futebol moderno surgiu na Inglaterra e, no início, era um esporte praticado apenas por homens."},
+ {p:"O que significa dizer que um município possui multiculturalidade?",
+  o:["Que nele convivem culturas de diferentes povos, como indígenas, africanos e europeus",
+     "Que ele possui muitos teatros, cinemas e centros culturais",
+     "Que todos os moradores seguem os mesmos costumes e tradições",
+     "Que ele recebe muitos turistas durante as festas do ano"],
+  c:0, e:"Multiculturalidade é a convivência de várias culturas em um mesmo lugar. No Brasil, misturam-se influências indígenas, africanas, europeias e de imigrantes atuais."},
+ {p:"Qual alternativa apresenta apenas exemplos de manifestações culturais?",
+  o:["Carnaval, festas juninas e danças típicas",
+     "Rios, montanhas e florestas do município",
+     "Prefeitura, escolas e hospitais da cidade",
+     "Ruas, avenidas e praças do bairro"],
+  c:0, e:"Carnaval, festas juninas e danças típicas são manifestações culturais. Rios e montanhas são elementos naturais; prédios e ruas são construções do espaço urbano."}
+ ]
+},
+{
+ titulo:"Povos e Comunidades Tradicionais",
+ desc:"Etnias, quilombos, ribeirinhos e caiçaras", icone:ICONES.povos, classe:"t2", cor:"#3E8ED0",
+ questoes:[
+ {p:"O que é etnia?",
+  o:["Um grupo de pessoas que mora no mesmo bairro ou na mesma cidade",
+     "Um grupo de pessoas que possui identidade cultural em comum, como língua, religião e costumes",
+     "Um conjunto de pessoas que exerce a mesma profissão",
+     "Um grupo de pessoas que nasceu no mesmo país, mesmo com culturas diferentes"],
+  c:1, e:"Etnia é um grupo de pessoas que compartilha uma identidade cultural: mesma língua, religião, hábitos e costumes."},
+ {p:"Sobre os povos tradicionais do Brasil, é correto afirmar que:",
+  o:["Vivem todos em grandes centros urbanos, longe da natureza",
+     "Não sofrem mais nenhum tipo de ameaça atualmente",
+     "Enfrentam ameaças como o desmatamento e a perda de seus territórios",
+     "Abandonaram completamente seus costumes e tradições antigas"],
+  c:2, e:"Os povos tradicionais ainda enfrentam várias ameaças, como o desmatamento, a invasão e a perda de seus territórios."},
+ {p:"Em qual região do Brasil há maior presença de seringueiras?",
+  o:["Na Mata Atlântica, próxima ao litoral",
+     "No Cerrado, na região central do país",
+     "Na Floresta Amazônica",
+     "Na Caatinga, no sertão nordestino"],
+  c:2, e:"A seringueira é uma árvore típica da Floresta Amazônica. Dela os seringueiros extraem o látex."},
+ {p:"Do látex extraído da seringueira é possível produzir:",
+  o:["Pneus, luvas e brinquedos de borracha",
+     "Tecidos de algodão e roupas",
+     "Papel, papelão e cadernos",
+     "Vidros, copos e cerâmicas"],
+  c:0, e:"O látex é a matéria-prima da borracha, usada para fabricar pneus, luvas, balões e brinquedos."},
+ {p:"Quem é o seringueiro?",
+  o:["O trabalhador que extrai o látex das seringueiras na floresta",
+     "O agricultor que planta seringueiras nas fazendas do Sul",
+     "O comerciante que vende produtos de borracha nas cidades",
+     "O operário que trabalha nas fábricas de pneus"],
+  c:0, e:"O seringueiro é o trabalhador extrativista que corta a casca da seringueira para coletar o látex, vivendo na floresta de forma tradicional."},
+ {p:"Em que condições a população africana era trazida para o Brasil durante o período colonial?",
+  o:["Como trabalhadores contratados, que recebiam salário pela viagem",
+     "Como comerciantes que vinham vender produtos africanos",
+     "Como convidados do governo português para povoar o território",
+     "Em condições precárias e desumanas, escravizada e transportada em navios superlotados"],
+  c:3, e:"Os africanos eram capturados, escravizados e trazidos à força em navios negreiros superlotados, em condições precárias e desumanas."},
+ {p:"O que eram os quilombos?",
+  o:["Vilas construídas pelos portugueses para abrigar os colonos",
+     "Lugares onde os escravizados refugiados se escondiam e viviam em liberdade",
+     "Fazendas onde os escravizados trabalhavam na produção de açúcar",
+     "Aldeias onde viviam apenas os povos indígenas"],
+  c:1, e:"Os quilombos eram comunidades formadas por escravizados que fugiam do cativeiro e passavam a viver em liberdade."},
+ {p:"Qual é o quilombo mais conhecido da história do Brasil?",
+  o:["Quilombo do Rio Vermelho",
+     "Quilombo dos Palmares",
+     "Quilombo de Ouro Preto",
+     "Quilombo do Jequitinhonha"],
+  c:1, e:"O Quilombo dos Palmares, na Serra da Barriga (atual Alagoas), foi o maior e mais conhecido quilombo do Brasil. Seu líder mais famoso foi Zumbi."},
+ {p:"As populações tradicionais que vivem às margens dos rios, principalmente na Amazônia, são chamadas de:",
+  o:["Caiçaras","Sertanejos","Ribeirinhos","Quilombolas"],
+  c:2, e:"Os ribeirinhos vivem na beira dos rios, em casas de palafita, e dependem da pesca e do rio para viver."},
+ {p:"As comunidades tradicionais que vivem no litoral, na beira do mar, vivendo principalmente da pesca, são chamadas de:",
+  o:["Ribeirinhas","Caiçaras","Seringueiras","Indígenas"],
+  c:1, e:"Os caiçaras vivem no litoral, principalmente entre o Rio de Janeiro e o Paraná, e têm na pesca sua principal atividade."}
+ ]
+},
+{
+ titulo:"Influências Culturais de Diferentes Povos",
+ desc:"Diversidade cultural e sabores que contam histórias", icone:ICONES.comida, classe:"t3", cor:"#3FA974",
+ questoes:[
+ {p:"O que é diversidade cultural?",
+  o:["A existência de uma única cultura oficial em todo o país",
+     "O conjunto de leis que organiza as festas populares",
+     "A divisão do território brasileiro em estados e municípios",
+     "A convivência de diferentes culturas, costumes e tradições em um mesmo lugar"],
+  c:3, e:"Diversidade cultural é a presença e a convivência de várias culturas diferentes em um mesmo país, como acontece no Brasil."},
+ {p:"Quais foram os três principais grupos que contribuíram para a formação do povo brasileiro?",
+  o:["Indígenas, europeus e africanos",
+     "Europeus, asiáticos e árabes",
+     "Africanos, japoneses e espanhóis",
+     "Indígenas, alemães e chineses"],
+  c:0, e:"O povo brasileiro foi formado principalmente pelos povos indígenas que já viviam aqui, pelos europeus (sobretudo portugueses) e pelos africanos."},
+ {p:"Qual alternativa apresenta apenas contribuições da cultura indígena para o Brasil?",
+  o:["Feijoada, capoeira e samba",
+     "Uso da rede para dormir, banho diário e o guaraná",
+     "Pizza, macarrão e polenta",
+     "Sushi, sashimi e o cultivo de flores"],
+  c:1, e:"Dos indígenas herdamos o mutirão, o uso da rede, o hábito do banho diário, alimentos como batata-doce, guaraná e palmito, além de muitas lendas."},
+ {p:"O que é o mutirão, costume herdado dos povos indígenas?",
+  o:["Uma dança em roda apresentada nas festas populares",
+     "Um trabalho coletivo em que as pessoas se ajudam para realizar uma tarefa",
+     "Uma cerimônia religiosa realizada nas aldeias",
+     "Um tipo de comércio de trocas entre as comunidades"],
+  c:1, e:"O mutirão é a reunião de pessoas para realizar juntas um trabalho, como construir uma casa ou colher uma plantação, ajudando umas às outras."},
+ {p:"Qual grupo de palavras tem origem indígena?",
+  o:["Abajur, croissant e chique",
+     "Futebol, gol e sanduíche",
+     "Samambaia, Curitiba e siri",
+     "Macarrão, piano e aquarela"],
+  c:2, e:"Samambaia, Curitiba e siri vêm das línguas indígenas, principalmente do tupi. As outras palavras vieram do francês, do inglês e do italiano."},
+ {p:"O quibe e a esfiha são pratos muito apreciados no Brasil. Qual povo trouxe essas receitas?",
+  o:["Os italianos","Os japoneses","Os portugueses","Os árabes"],
+  c:3, e:"O quibe e a esfiha são pratos típicos da culinária árabe, trazidos pelos imigrantes vindos de países como Síria e Líbano."},
+ {p:"A pizza e o macarrão fazem parte da alimentação dos brasileiros graças à influência de qual povo?",
+  o:["Dos espanhóis","Dos italianos","Dos árabes","Dos alemães"],
+  c:1, e:"A pizza e o macarrão chegaram ao Brasil com os imigrantes italianos, que se instalaram principalmente em São Paulo e no Sul do país."},
+ {p:"Ingredientes como o grão-de-bico e a ervilha foram trazidos para o Brasil por qual povo?",
+  o:["Pelos portugueses","Pelos japoneses","Pelos alemães","Pelos árabes"],
+  c:0, e:"Os portugueses trouxeram ingredientes muito usados em diversas receitas, como o grão-de-bico e a ervilha."},
+ {p:"Pratos como o sushi e o sashimi foram apresentados aos brasileiros por qual povo?",
+  o:["Pelos chineses","Pelos coreanos","Pelos japoneses","Pelos tailandeses"],
+  c:2, e:"Os imigrantes japoneses, que vieram viver principalmente no interior de São Paulo, apresentaram aos brasileiros pratos como o sushi e o sashimi."},
+ {p:"Que povo contribuiu para a alimentação no Brasil com diferentes tipos de frios e também com a cerveja?",
+  o:["Os holandeses","Os ingleses","Os alemães","Os poloneses"],
+  c:2, e:"Os imigrantes alemães, que se fixaram principalmente no Sul do Brasil, trouxeram a produção de frios (embutidos) e a tradição da cerveja."}
+ ]
+},
+{
+ titulo:"Influências Africanas e Multiculturalidade",
+ desc:"Contribuições dos povos africanos e a mistura de culturas", icone:ICONES.musica, classe:"t4", cor:"#A45FBF",
+ questoes:[
+ {p:"Qual alternativa apresenta apenas contribuições da cultura africana para o Brasil?",
+  o:["Capoeira, samba e feijoada",
+     "Uso da rede, guaraná e mutirão",
+     "Pizza, macarrão e polenta",
+     "Quibe, esfiha e grão-de-bico"],
+  c:0, e:"Dos africanos herdamos a capoeira, o samba, a feijoada, instrumentos musicais, palavras e muitos outros costumes. As demais alternativas são heranças indígenas, italianas e árabes."},
+ {p:"O que é a capoeira, herança dos africanos trazidos ao Brasil?",
+  o:["Uma dança de roda praticada apenas nas festas juninas",
+     "Uma mistura de luta, dança e música criada pelos africanos escravizados",
+     "Um instrumento musical usado nas comemorações religiosas",
+     "Um tipo de comida feita com feijão-preto e carnes"],
+  c:1, e:"A capoeira mistura luta, dança e música. Foi criada pelos africanos escravizados no Brasil como forma de resistência e hoje é reconhecida no mundo inteiro."},
+ {p:"Qual grupo de palavras tem origem africana?",
+  o:["Samambaia, Curitiba e siri",
+     "Abajur, croissant e chique",
+     "Caçula, cafuné e dendê",
+     "Futebol, gol e sanduíche"],
+  c:2, e:"Caçula, cafuné, dendê, moleque e quitanda são palavras de origem africana. Samambaia e siri vêm do tupi; as outras vieram do francês e do inglês."},
+ {p:"Quais instrumentos musicais fazem parte da herança africana no Brasil?",
+  o:["Violino, piano e flauta",
+     "Berimbau, atabaque e agogô",
+     "Gaita, acordeon e violão",
+     "Trompete, saxofone e bateria"],
+  c:1, e:"O berimbau, o atabaque e o agogô são instrumentos de origem africana, usados na capoeira, no samba e em outras manifestações culturais brasileiras."},
+ {p:"Qual ritmo musical brasileiro nasceu da influência dos povos africanos?",
+  o:["A valsa","O rock","O samba","A ópera"],
+  c:2, e:"O samba nasceu da mistura de ritmos trazidos pelos africanos e se tornou um dos maiores símbolos da cultura brasileira, presente principalmente no Carnaval."},
+ {p:"Qual alternativa apresenta comidas da culinária de influência africana no Brasil?",
+  o:["Sushi, sashimi e tempurá",
+     "Acarajé, vatapá e azeite de dendê",
+     "Pizza, lasanha e polenta",
+     "Salsicha, chucrute e cerveja"],
+  c:1, e:"O acarajé, o vatapá e o uso do azeite de dendê são heranças africanas, muito presentes na culinária da Bahia."},
+ {p:"Em qual estado brasileiro a influência africana é mais forte na cultura, na comida e na música?",
+  o:["No Rio Grande do Sul","Em Santa Catarina","No Paraná","Na Bahia"],
+  c:3, e:"A Bahia recebeu grande parte dos africanos trazidos ao Brasil, por isso a influência africana é muito forte na cultura baiana: no acarajé, no candomblé, na música e na capoeira."},
+ {p:"Por que o Brasil é considerado um país multicultural?",
+  o:["Porque possui muitos museus e bibliotecas nas grandes cidades",
+     "Porque recebeu a influência de vários povos, como indígenas, africanos, europeus e imigrantes de outros países",
+     "Porque todos os brasileiros falam mais de uma língua",
+     "Porque cada estado possui um governo diferente"],
+  c:1, e:"O Brasil é multicultural porque sua cultura foi formada pela mistura de vários povos: indígenas, africanos, europeus e imigrantes atuais, cada um com suas contribuições."},
+ {p:"Sobre a multiculturalidade brasileira, é correto afirmar que:",
+  o:["As culturas dos diferentes povos se misturaram e formaram a cultura brasileira",
+     "Cada povo manteve sua cultura totalmente separada das outras",
+     "Apenas a cultura europeia influenciou os costumes do Brasil",
+     "As culturas indígena e africana desapareceram com o tempo"],
+  c:0, e:"No Brasil, as culturas dos diferentes povos se misturaram: na comida, na música, nas palavras e nos costumes. Essa mistura formou a nossa identidade cultural."},
+ {p:"Qual situação do dia a dia mostra a multiculturalidade brasileira?",
+  o:["Uma família que almoça feijoada, janta pizza e usa palavras de origem indígena e africana",
+     "Uma cidade onde todos os moradores têm exatamente os mesmos costumes",
+     "Uma escola onde só se estudam as tradições de um único povo",
+     "Um município que proíbe festas e comidas de outros países"],
+  c:0, e:"A multiculturalidade aparece no nosso cotidiano: comemos pratos de várias origens, falamos palavras do tupi e de línguas africanas e celebramos festas de diferentes povos."}
+ ]
+}
+];
+
+/* ================== RESUMOS (ESTUDO RÁPIDO) ================== */
+const RESUMOS = [
+`<h3>O que é uma manifestação cultural?</h3>
+<p>É todo jeito que um povo tem de mostrar a sua cultura: as festas, as danças, as músicas, as comidas e até as brincadeiras! Elas passam de pais para filhos há muito, muito tempo.</p>
+<h3>De onde vieram as brincadeiras?</h3>
+<p>Muitas brincadeiras que você conhece vieram de bem longe. Olha só:</p>
+<div class="mini-grid">
+  <div class="mini"><b>Ciranda</b>Veio de Portugal, é uma brincadeira de roda.</div>
+  <div class="mini"><b>Pipa</b>Foi criada na China, há milhares de anos.</div>
+  <div class="mini"><b>Amarelinha</b>Vem da Grécia e da Roma antigas.</div>
+  <div class="mini"><b>Peteca</b>Foi criada pelos indígenas aqui do Brasil.</div>
+</div>
+<h3>O Carnaval e o entrudo</h3>
+<p>O Carnaval começou com uma brincadeira chamada <b>entrudo</b>, que veio de Portugal. As pessoas jogavam água, farinha e outras coisas umas nas outras! Com o tempo, essa bagunça virou a maior festa do Brasil.</p>
+<h3>Personagens do folclore</h3>
+<p>O folclore brasileiro é cheio de personagens: o <b>Saci</b>, menino de uma perna só que apronta muito; a <b>Iara</b>, a sereia dos rios; o <b>Boto</b>, que vira um rapaz nas festas; e a <b>Cuca</b>, a bruxa que assusta as crianças que não querem dormir.</p>
+<h3>O futebol</h3>
+<p>O futebol, a maior paixão do Brasil, nasceu na <b>Inglaterra</b>. E sabia que, no começo, só os <b>homens</b> podiam jogar? Ainda bem que isso mudou!</p>
+<div class="caixa"><b>Para lembrar:</b> multiculturalidade é quando várias culturas diferentes vivem juntas no mesmo lugar. O Brasil é assim: um pedacinho de cada povo!</div>`,
+
+`<h3>O que é etnia?</h3>
+<p>Etnia é um grupo de pessoas que tem a <b>mesma cultura</b>: falam a mesma língua, têm a mesma religião, os mesmos costumes e as mesmas tradições.</p>
+<h3>Quem são os povos tradicionais?</h3>
+<p>São povos que vivem de um jeito mais ligado à <b>natureza</b>, com costumes muito antigos. Infelizmente, eles enfrentam ameaças, como o desmatamento e a perda de suas terras.</p>
+<h3>Os seringueiros</h3>
+<p>Vivem na <b>Floresta Amazônica</b> e tiram o <b>látex</b> da seringueira, uma árvore. Do látex se faz a borracha, que vira pneus, luvas, balões e brinquedos!</p>
+<h3>Os africanos e os quilombos</h3>
+<p>Os africanos foram trazidos à força para o Brasil, <b>escravizados</b>, em navios lotados e em condições horríveis. Muitos conseguiam fugir e formavam os <b>quilombos</b>, lugares escondidos onde viviam em liberdade. O mais famoso foi o <b>Quilombo dos Palmares</b>, que teve como grande líder o <b>Zumbi</b>.</p>
+<h3>Ribeirinhos e caiçaras</h3>
+<div class="mini-grid">
+  <div class="mini"><b>Ribeirinhos</b>Vivem na beira dos <b>rios</b>, em casas de palafita, e pescam para viver.</div>
+  <div class="mini"><b>Caiçaras</b>Vivem na beira do <b>mar</b>, no litoral, e também vivem da pesca.</div>
+</div>
+<div class="caixa"><b>Truque para não confundir:</b> RIbeirinho tem RIo escondido no nome! Se tem RIo, é RIbeirinho. Se é mar e praia, é caiçara.</div>`,
+
+`<h3>O que é diversidade cultural?</h3>
+<p>É quando várias culturas diferentes vivem juntas no mesmo país, cada uma com suas festas, comidas e costumes. O Brasil é campeão nisso!</p>
+<h3>Quem formou o povo brasileiro?</h3>
+<p>Três grandes grupos formaram o nosso povo:</p>
+<div class="mini-grid">
+  <div class="mini"><b>Indígenas</b>Já viviam aqui antes de todo mundo.</div>
+  <div class="mini"><b>Europeus</b>Principalmente os portugueses, que chegaram de navio.</div>
+  <div class="mini"><b>Africanos</b>Trazidos à força, mas que deixaram heranças enormes.</div>
+</div>
+<h3>Heranças dos indígenas</h3>
+<p>Dos indígenas aprendemos a dormir de <b>rede</b>, a tomar <b>banho todo dia</b> e a fazer <b>mutirão</b> (quando todo mundo se junta para ajudar em um trabalho). Eles também nos deram alimentos como o <b>guaraná</b>, a <b>batata-doce</b> e o <b>palmito</b>, e palavras como <b>samambaia</b>, <b>Curitiba</b> e <b>siri</b>.</p>
+<h3>Sabores que contam histórias</h3>
+<p>Cada povo que veio para o Brasil trouxe comidas deliciosas:</p>
+<div class="mini-grid">
+  <div class="mini"><b>Árabes</b>Quibe e esfiha.</div>
+  <div class="mini"><b>Italianos</b>Pizza e macarrão.</div>
+  <div class="mini"><b>Portugueses</b>Grão-de-bico e ervilha.</div>
+  <div class="mini"><b>Japoneses</b>Sushi e sashimi.</div>
+  <div class="mini"><b>Alemães</b>Frios (presunto, salame) e cerveja.</div>
+</div>
+<div class="caixa"><b>Para lembrar:</b> quando você come pizza no jantar, está provando um pedacinho da Itália. Quando toma guaraná, um pedacinho da cultura indígena!</div>`,
+
+`<h3>Heranças dos africanos</h3>
+<p>Os africanos deixaram heranças gigantes na nossa cultura. As mais famosas são a <b>capoeira</b>, o <b>samba</b> e a <b>feijoada</b>.</p>
+<h3>O que é a capoeira?</h3>
+<p>É uma mistura de <b>luta, dança e música</b>. Foi criada pelos africanos escravizados como forma de resistência e hoje é praticada no mundo inteiro!</p>
+<h3>Instrumentos musicais</h3>
+<div class="mini-grid">
+  <div class="mini"><b>Berimbau</b>Usado na roda de capoeira.</div>
+  <div class="mini"><b>Atabaque</b>Um tambor grande e alto.</div>
+  <div class="mini"><b>Agogô</b>Feito de dois sininhos de metal.</div>
+</div>
+<h3>Comidas de origem africana</h3>
+<p>O <b>acarajé</b>, o <b>vatapá</b> e o <b>azeite de dendê</b> são heranças africanas. Essas delícias são muito famosas na <b>Bahia</b>, o estado onde a influência africana é mais forte.</p>
+<h3>Palavras que vieram da África</h3>
+<p>Você usa palavras africanas todos os dias e nem sabia: <b>caçula</b> (o filho mais novo), <b>cafuné</b> (carinho na cabeça), <b>moleque</b>, <b>quitanda</b> e <b>dendê</b>.</p>
+<h3>Por que o Brasil é multicultural?</h3>
+<p>Porque a nossa cultura foi formada pela <b>mistura de vários povos</b>: indígenas, africanos, europeus e imigrantes de muitos países. As culturas não ficaram separadas, elas se misturaram!</p>
+<div class="caixa"><b>Exemplo do dia a dia:</b> uma família que almoça feijoada, janta pizza, dorme de rede e faz cafuné está vivendo a multiculturalidade sem perceber!</div>`
+];
+
+/* ================== ESTADO ================== */
+let modo = 'estudo';
+let temaAtual = 0, idxQ = 0, acertos = 0, streak = 0;
+const melhores = [null, null, null, null]; // melhor nota da sessão
+
+/* ================== MENU ================== */
+const menuEl = document.getElementById('menuCards');
+function montarMenu(){
+  document.getElementById('abaEstudo').classList.toggle('ativa', modo==='estudo');
+  document.getElementById('abaQuiz').classList.toggle('ativa', modo==='quiz');
+  document.getElementById('menuSub').textContent =
+    modo==='estudo' ? 'Qual assunto você quer estudar hoje?' : 'Qual conteúdo vamos praticar hoje?';
+
+  menuEl.innerHTML = '';
+  DADOS.forEach((t, i)=>{
+    const b = document.createElement('button');
+    b.className = 'card-tema ' + t.classe;
+    const info = modo==='estudo'
+      ? `${t.desc} &bull; Resumo para ler`
+      : `${t.desc} &bull; ${t.questoes.length} questões`;
+    b.innerHTML = `
+      <div class="icone">${t.icone}</div>
+      <div>
+        <h3>${t.titulo}</h3>
+        <div class="desc">${info}</div>
+        ${modo==='quiz' && melhores[i]!==null ? `<span class="melhor">Melhor resultado: ${melhores[i]} / ${t.questoes.length}</span>` : ''}
+      </div>`;
+    b.onclick = ()=> modo==='estudo' ? abrirEstudo(i) : iniciarQuiz(i);
+    menuEl.appendChild(b);
+  });
+}
+
+function trocarModo(m){ modo = m; montarMenu(); }
+
+/* ================== ESTUDO RÁPIDO ================== */
+function abrirEstudo(i){
+  temaAtual = i;
+  const tema = DADOS[i];
+  document.getElementById('estudoNome').textContent = tema.titulo;
+  document.getElementById('areaResumo').innerHTML =
+    `<div class="resumo" style="border-top-color:${tema.cor}; --dot:${tema.cor}">${RESUMOS[i]}</div>`;
+  document.getElementById('btnQuizEstudo').onclick = ()=>iniciarQuiz(i);
+  mostrarTela('telaEstudo');
+}
+
+/* ================== NAVEGAÇÃO ================== */
+function mostrarTela(id){
+  document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
+  document.getElementById(id).classList.add('ativa');
+  window.scrollTo({top:0});
+}
+function voltarMenu(){ montarMenu(); mostrarTela('telaMenu'); }
+function refazer(){ iniciarQuiz(temaAtual); }
+
+/* ================== QUIZ ================== */
+function iniciarQuiz(i){
+  temaAtual = i; idxQ = 0; acertos = 0; streak = 0;
+  document.getElementById('temaNome').textContent = DADOS[i].titulo;
+  atualizarStreak();
+  mostrarTela('telaQuiz');
+  renderQuestao();
+}
+
+function renderQuestao(){
+  const tema = DADOS[temaAtual];
+  const q = tema.questoes[idxQ];
+  const total = tema.questoes.length;
+
+  document.getElementById('barra').style.width = (idxQ/total*100) + '%';
+  document.getElementById('contagem').textContent = `Questão ${idxQ+1} de ${total} • Acertos: ${acertos}`;
+
+  const area = document.getElementById('areaQuestao');
+  area.innerHTML = '';
+  const qDiv = document.createElement('div');
+  qDiv.className = 'q';
+  qDiv.style.borderTopColor = tema.cor;
+
+  let optsHtml = '';
+  q.o.forEach((op, oi)=>{
+    optsHtml += `
+      <div class="opt" data-oi="${oi}" role="button" tabindex="0">
+        <span class="letra">${String.fromCharCode(65+oi)}</span>
+        <span>${op}</span>
+      </div>`;
+  });
+
+  qDiv.innerHTML = `
+    <div class="enun"><span class="qn" style="background:${tema.cor}">${String(idxQ+1).padStart(2,'0')}</span>${q.p}</div>
+    <div class="opts">${optsHtml}</div>
+    <div class="acao">
+      <button class="btn" id="btnVerificar" disabled>Verificar</button>
+      <button class="btn verde" id="btnProxima" style="display:none">Próxima &#8594;</button>
+    </div>
+    <div class="feedback" id="fb"></div>`;
+  area.appendChild(qDiv);
+
+  const opts = [...qDiv.querySelectorAll('.opt')];
+  const btnV = qDiv.querySelector('#btnVerificar');
+  const btnP = qDiv.querySelector('#btnProxima');
+  const fb = qDiv.querySelector('#fb');
+  let escolha = null, travado = false;
+
+  function selecionar(opt){
+    if(travado) return;
+    opts.forEach(o=>o.classList.remove('sel'));
+    opt.classList.add('sel');
+    escolha = parseInt(opt.dataset.oi);
+    btnV.disabled = false;
+  }
+  opts.forEach(opt=>{
+    opt.addEventListener('click', ()=>selecionar(opt));
+    opt.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault(); selecionar(opt);} });
+  });
+
+  btnV.addEventListener('click', ()=>{
+    if(escolha===null || travado) return;
+    travado = true;
+    const correta = q.c;
+    opts.forEach((o,oi)=>{
+      o.classList.add('travada'); o.classList.remove('sel');
+      if(oi===correta) o.classList.add('certa');
+      if(oi===escolha && escolha!==correta) o.classList.add('errada');
+    });
+    btnV.style.display = 'none';
+
+    if(escolha===correta){
+      acertos++; streak++;
+      qDiv.classList.add('saltar');
+      fb.className = 'feedback ok';
+      fb.innerHTML = `<span class="tit">${fraseAcerto()}</span>${q.e}`;
+      celebrar();
+      tocarSom(true);
+    } else {
+      streak = 0;
+      qDiv.classList.add('tremer');
+      fb.className = 'feedback no';
+      fb.innerHTML = `<span class="tit">Não foi dessa vez. A correta é a letra ${String.fromCharCode(65+correta)}.</span>${q.e}`;
+      tocarSom(false);
+    }
+    atualizarStreak();
+    document.getElementById('contagem').textContent = `Questão ${idxQ+1} de ${total} • Acertos: ${acertos}`;
+
+    btnP.style.display = 'inline-block';
+    btnP.textContent = (idxQ+1 < total) ? 'Próxima \u2192' : 'Ver resultado \u2192';
+    btnP.focus();
+  });
+
+  btnP.addEventListener('click', ()=>{
+    idxQ++;
+    if(idxQ < total) renderQuestao();
+    else mostrarFinal();
+  });
+}
+
+function fraseAcerto(){
+  const base = ['Acertou! Muito bem!','Isso mesmo! Excelente!','Perfeito! Continue assim!','Mandou bem!'];
+  if(streak>=5) return `Incrível! ${streak} acertos seguidos!`;
+  if(streak>=3) return `Que sequência! ${streak} acertos seguidos!`;
+  return base[Math.floor(Math.random()*base.length)];
+}
+
+function atualizarStreak(){
+  const el = document.getElementById('streak');
+  document.getElementById('streakN').textContent = streak;
+  el.classList.toggle('on', streak>=2);
+}
+
+/* ================== FINAL ================== */
+function mostrarFinal(){
+  const tema = DADOS[temaAtual];
+  const total = tema.questoes.length;
+  if(melhores[temaAtual]===null || acertos>melhores[temaAtual]) melhores[temaAtual] = acertos;
+
+  document.getElementById('finalTema').textContent = tema.titulo;
+  document.getElementById('notaFinal').textContent = `${acertos} / ${total}`;
+
+  const pct = acertos/total;
+  let titulo, msg, nEstrelas;
+  if(pct===1){ titulo='Nota máxima!'; msg='Você acertou todas as questões. Domínio completo do conteúdo!'; nEstrelas=3; }
+  else if(pct>=0.8){ titulo='Excelente!'; msg='Ótimo resultado! Revise apenas as questões que errou.'; nEstrelas=3; }
+  else if(pct>=0.6){ titulo='Bom trabalho!'; msg='Você está no caminho certo. Releia as explicações e tente de novo.'; nEstrelas=2; }
+  else if(pct>=0.4){ titulo='Quase lá!'; msg='Revise o conteúdo do capítulo e refaça o quiz para melhorar sua nota.'; nEstrelas=1; }
+  else { titulo='Vamos revisar?'; msg='Estude o capítulo com calma e volte para tentar de novo. Você consegue!'; nEstrelas=0; }
+
+  document.getElementById('tituloFinal').textContent = titulo;
+  document.getElementById('msgFinal').textContent = msg;
+
+  const estrelas = [...document.querySelectorAll('#estrelas .e')];
+  estrelas.forEach(e=>{ e.classList.remove('ganha','anim'); e.style.transform='scale(0)'; });
+  mostrarTela('telaFinal');
+
+  estrelas.forEach((e,i)=>{
+    setTimeout(()=>{
+      e.style.transform='';
+      if(i<nEstrelas) e.classList.add('ganha');
+      e.classList.add('anim');
+      if(i<nEstrelas) tocarSom(true, 660 + i*160);
+    }, 350 + i*350);
+  });
+  if(pct>=0.8) setTimeout(()=>celebrar(140), 500);
+}
+
+/* ================== EFEITOS: CONFETE ================== */
+const cv = document.getElementById('confete');
+const ctx = cv.getContext('2d');
+let parts = [], animando = false;
+function ajustarCanvas(){ cv.width = innerWidth; cv.height = innerHeight; }
+addEventListener('resize', ajustarCanvas); ajustarCanvas();
+
+const CORES = ['#F2A519','#3E8ED0','#3FA974','#E0762F','#A45FBF','#E4506B'];
+function celebrar(n=80){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const selo = document.getElementById('selo');
+  if(n<100){ // selo só nos acertos de questão
+    selo.classList.remove('mostrar'); void selo.offsetWidth;
+    selo.textContent = streak>=3 ? `${streak} seguidas!` : 'Acertou!';
+    selo.classList.add('mostrar');
+  }
+  for(let i=0;i<n;i++){
+    parts.push({
+      x: innerWidth/2 + (Math.random()-.5)*160,
+      y: innerHeight*0.35,
+      vx:(Math.random()-.5)*11,
+      vy:-(Math.random()*9+5),
+      g:.28+Math.random()*.12,
+      w:6+Math.random()*7, h:9+Math.random()*8,
+      cor:CORES[Math.floor(Math.random()*CORES.length)],
+      rot:Math.random()*Math.PI, vr:(Math.random()-.5)*.3,
+      vida:90+Math.random()*50
+    });
+  }
+  if(!animando){ animando=true; requestAnimationFrame(loopConfete); }
+}
+function loopConfete(){
+  ctx.clearRect(0,0,cv.width,cv.height);
+  parts = parts.filter(p=>p.vida>0 && p.y<cv.height+40);
+  parts.forEach(p=>{
+    p.x+=p.vx; p.y+=p.vy; p.vy+=p.g; p.vx*=.99; p.rot+=p.vr; p.vida--;
+    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+    ctx.globalAlpha = Math.min(1, p.vida/40);
+    ctx.fillStyle = p.cor;
+    ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+    ctx.restore();
+  });
+  if(parts.length){ requestAnimationFrame(loopConfete); }
+  else { animando=false; ctx.clearRect(0,0,cv.width,cv.height); }
+}
+
+/* ================== EFEITOS: SOM ================== */
+let audioCtx = null;
+function tocarSom(acertou, freqBase){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    const t = audioCtx.currentTime;
+    if(acertou){
+      const notas = freqBase ? [freqBase] : [523.25, 659.25, 783.99]; // dó-mi-sol
+      notas.forEach((f,i)=>{
+        const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+        o.type='triangle'; o.frequency.value=f;
+        g.gain.setValueAtTime(0.0001, t+i*0.09);
+        g.gain.exponentialRampToValueAtTime(0.18, t+i*0.09+0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t+i*0.09+0.35);
+        o.connect(g); g.connect(audioCtx.destination);
+        o.start(t+i*0.09); o.stop(t+i*0.09+0.4);
+      });
+    } else {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type='sine'; o.frequency.setValueAtTime(220,t);
+      o.frequency.exponentialRampToValueAtTime(150, t+0.25);
+      g.gain.setValueAtTime(0.0001,t);
+      g.gain.exponentialRampToValueAtTime(0.12,t+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+0.3);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(t); o.stop(t+0.32);
+    }
+  }catch(e){/* som indisponível */}
+}
+
+montarMenu();
+</script>
+</body>
+</html>
